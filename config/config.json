@@ -1,0 +1,12 @@
+{
+    "ServerInfo" : {
+        "Host" : "127.0.0.1:8099"
+    },
+
+    "RedisInfo" : {
+        "Host" : "127.0.0.1:6379",
+        "MaxIdle" : 16,
+        "MaxActive" : 0,
+        "IdleDuration" : 300
+    }
+}
