@@ -58,7 +58,6 @@ func (this *Processor) messageProcess(message common.Message) (err error) {
 			fmt.Printf("some error when send group message: %v\n", err)
 		}
 	case common.ShowAllOnlineUsersType:
-		fmt.Println("yes in this!!!!!!!!!!!!!!!!!!!!!!!!!!")
 		p := OnlineInfoProcess{this.Conn}
 		err = p.showAllOnlineUserList()
 		if err != nil {

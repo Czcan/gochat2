@@ -43,7 +43,6 @@ func showAfterLoginMenu() {
 		if err != nil {
 			logger.Error("Some error occured when get online user list, error: %v\n", err)
 		}
-		return
 	case 2:
 		logger.Notice("Say something:\n")
 		content, err = inputReader.ReadString('\n')
@@ -58,6 +57,7 @@ func showAfterLoginMenu() {
 		} else {
 			logger.Success("Send group message succeed!!")
 		}
+
 	case 3:
 		var targetUserName string
 		logger.Notice("Select one friend by user name:\n")
@@ -69,19 +69,19 @@ func showAfterLoginMenu() {
 		}
 
 		messageProcess := MessageProcess{}
-		conn, err := messageProcess.PointToPointCommunication(targetUserName, model.CurrentUser.UserName, content)
+		err = messageProcess.PointToPointCommunication(targetUserName, model.CurrentUser.UserName, content)
 		if err != nil {
 			logger.Error("Some error occurred when point to point comunication: %v\n", err)
 			return
 		}
 
-		errMsg := make(chan error)
-		go Response(conn, errMsg)
-		err = <-errMsg
+		// errMsg := make(chan error)
+		// go Response(conn, errMsg)
+		// err = <-errMsg
 
-		if err != nil {
-			logger.Error("Send message error: %v\n", err)
-		}
+		// if err != nil {
+		// 	logger.Error("Send message error: %v\n", err)
+		// }
 
 	case 4:
 		logger.Warn("Exit...\n")

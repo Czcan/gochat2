@@ -83,9 +83,9 @@ func (mp *MessageProcess) SendGroupMessageToServer(groupID int, currentUserName 
 	return
 }
 
-func (mp *MessageProcess) PointToPointCommunication(targetUserName string, sourceUserName string, content string) (conn net.Conn, err error) {
+func (mp *MessageProcess) PointToPointCommunication(targetUserName string, sourceUserName string, content string) (err error) {
 	serverInfo := config.Configuration.ServerInfo
-	conn, err = net.Dial("tcp", serverInfo.Host)
+	conn, err := net.Dial("tcp", serverInfo.Host)
 	if err != nil {
 		return
 	}
@@ -112,6 +112,20 @@ func (mp *MessageProcess) PointToPointCommunication(targetUserName string, sourc
 
 	dispatcher := utils.Dispatcher{Conn: conn}
 	err = dispatcher.SendData(pointMessage)
+	if err != nil {
+		return
+	}
+
+	errMsg := make(chan error)
+	go Response(conn, errMsg)
+	err = <-errMsg
+	if err != nil {
+		return
+	}
+
+	for {
+		showAfterLoginMenu()
+	}
 
 	return
 }
