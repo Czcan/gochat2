@@ -15,7 +15,7 @@ const (
 	// status code for login
 	LoginError   = 403
 	NotExit      = 404
-	LoginSuccess = 200
+	LoginSucceed = 200
 
 	// status code for register
 	HasExited         = 403

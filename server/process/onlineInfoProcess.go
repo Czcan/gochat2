@@ -13,14 +13,14 @@ type OnlineInfoProcess struct {
 	Conn net.Conn
 }
 
-func (this *OnlineInfoProcess) showAllOnlineUserList(message string) (err error) {
+func (this *OnlineInfoProcess) showAllOnlineUserList() (err error) {
 	var (
 		onlineUserListInfo []common.UserInfo
 		code               int
 	)
 
 	for _, connInfo := range model.ClientConnMap {
-		user, err := model.CurrentUserDao.GetUserByName(connInfo.UserName)
+		user, err := model.CurrentUserDao.GetUserByUserName(connInfo.UserName)
 		if err != nil {
 			continue
 		}
@@ -36,7 +36,7 @@ func (this *OnlineInfoProcess) showAllOnlineUserList(message string) (err error)
 		code = 200
 	}
 
-	err = this.responseClient(this.Conn, code, string(data), err.Error())
+	err = this.responseClient(this.Conn, code, string(data), fmt.Sprintf("%v", err))
 	if err != nil {
 		fmt.Printf("response online user list message to client error: %v\n", err)
 	}

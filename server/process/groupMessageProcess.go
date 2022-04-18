@@ -13,7 +13,7 @@ type SendGroupMessageProcess struct{}
 func (this *SendGroupMessageProcess) sendGroupMessage(message string) (err error) {
 	var groupMessage common.UserSendGroupMessage
 
-	err = json.Unmarshal([]byte(message), groupMessage)
+	err = json.Unmarshal([]byte(message), &groupMessage)
 	if err != nil {
 		fmt.Printf("json unmarshal group message error: %v\n", err)
 	}

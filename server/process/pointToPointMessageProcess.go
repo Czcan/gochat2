@@ -14,7 +14,6 @@ type PointToPointMessageProcess struct{}
 func (this *PointToPointMessageProcess) sendMessageToTargetUser(message string) (err error) {
 	var (
 		pointMessage common.PointToPointMessage
-		code         int
 	)
 	err = json.Unmarshal([]byte(message), &pointMessage)
 	if err != nil {
@@ -25,6 +24,9 @@ func (this *PointToPointMessageProcess) sendMessageToTargetUser(message string) 
 	// find conn by targetUserName
 	clientConn := model.ClientConn{}
 	conn, err := clientConn.SearchByUserName(pointMessage.TargetUserName)
+	if err != nil {
+		return
+	}
 
 	var responseMessage common.ResponseMessage
 	responseMessage.Type = common.PointToPointMessageType
@@ -37,34 +39,38 @@ func (this *PointToPointMessageProcess) sendMessageToTargetUser(message string) 
 
 	data, err := json.Marshal(responseMessageData)
 	if err != nil {
-		code = 200
-	} else {
-		code = common.ServerError
+		return
 	}
 
-	err = responseClient(conn, code, string(data), err.Error())
+	responseMessage.Data = string(data)
+	responseMessage.Code = 200
+
+	responseData, _ := json.Marshal(responseMessage)
 	if err != nil {
-		fmt.Printf("point to point communicate, response client error: %v\n", err)
+		return
 	}
+
+	dispatcher := utils.Dispatcher{Conn: conn}
+	err = dispatcher.WriteData(responseData)
 
 	return
 }
 
-func responseClient(conn net.Conn, code int, data string, popErr string) (err error) {
+func (this *PointToPointMessageProcess) responseClient(conn net.Conn, code int, data string, popErr string) (err error) {
 	responseMessage := common.ResponseMessage{
-		Type:  common.PointToPointMessageType,
 		Code:  code,
-		Data:  data,
+		Type:  common.PointToPointMessageType,
 		Error: popErr,
+		Data:  data,
 	}
 
 	responseData, err := json.Marshal(responseMessage)
 	if err != nil {
-		fmt.Printf("json marshal response message error: %v\n", err)
+		fmt.Printf("some error when generate response message, error: %v", err)
 	}
 
 	dispatcher := utils.Dispatcher{Conn: conn}
-	dispatcher.WriteData(responseData)
+	err = dispatcher.WriteData(responseData)
 
 	return
 }

@@ -30,7 +30,7 @@ func (this *UserProcess) responseClient(responseMessageType string, code int, da
 	responseMessage.Data = data
 	responseMessage.Type = responseMessageType
 
-	responseData, err := json.Marshal(responseMessage.Data)
+	responseData, err := json.Marshal(responseMessage)
 	if err != nil {
 		fmt.Printf("json marshal response message error: %v\n", err)
 		return
@@ -84,13 +84,13 @@ func (this *UserProcess) UserLogin(message string) (err error) {
 	user, err := login(loginMessage.UserName, loginMessage.Password)
 	switch err {
 	case nil:
-		code = common.LoginSuccess
+		code = common.LoginSucceed
 
 		// save user conn status
 		clientConn := model.ClientConn{}
 		clientConn.Save(user.ID, user.Name, this.Conn)
 
-		userInfo := &common.UserInfo{ID: user.ID, UserName: user.Name}
+		userInfo := common.UserInfo{ID: user.ID, UserName: user.Name}
 		info, _ := json.Marshal(userInfo)
 		data = string(info)
 

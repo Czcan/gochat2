@@ -16,35 +16,51 @@ type Processor struct {
 // 处理消息
 // 根据消息类型， 选择相对于的 处理方式
 func (this *Processor) messageProcess(message common.Message) (err error) {
+	fmt.Printf("message from client type: %v\n", message.Type)
+
 	switch message.Type {
 	case common.LoginMessageType:
-		p := &UserProcess{Conn: this.Conn}
+		p := UserProcess{Conn: this.Conn}
 		err = p.UserLogin(message.Data)
 		if err != nil {
 			fmt.Printf("some error when user login : %v\n", err)
 		}
 	case common.RegisterMessageType:
-		p := &UserProcess{Conn: this.Conn}
+		p := UserProcess{Conn: this.Conn}
 		err = p.UserRegister(message.Data)
 		if err != nil {
 			fmt.Printf("some error when user register : %v\n", err)
 		}
 	case common.PointToPointMessageType:
 		fmt.Println("point to point communicate!!")
-		p := &PointToPointMessageProcess{}
+		p := PointToPointMessageProcess{}
 		err = p.sendMessageToTargetUser(message.Data)
 		if err != nil {
 			fmt.Printf("some error when point to point communicate: %v\n", err)
 		}
-	case common.SendGroupMessageToClientType:
-		p := &SendGroupMessageProcess{}
+		// var code int
+		// if err != nil {
+		// 	code = 400
+		// } else {
+		// 	code = 100
+		// }
+
+		// // responseClient(conn net.Conn, code int, data string, err error) {
+		// err := p.responseClient(this.Conn, code, "", err.Error())
+		// if err != nil {
+		// 	fmt.Printf("some err when popmessage: %v", err)
+		// }
+	case common.UserSendGroupMessageType:
+		fmt.Println("user send group message!")
+		p := SendGroupMessageProcess{}
 		err = p.sendGroupMessage(message.Data)
 		if err != nil {
 			fmt.Printf("some error when send group message: %v\n", err)
 		}
 	case common.ShowAllOnlineUsersType:
-		p := &OnlineInfoProcess{}
-		err = p.showAllOnlineUserList(message.Data)
+		fmt.Println("yes in this!!!!!!!!!!!!!!!!!!!!!!!!!!")
+		p := OnlineInfoProcess{this.Conn}
+		err = p.showAllOnlineUserList()
 		if err != nil {
 			fmt.Printf("some error when get online user list: %v\n", err)
 		}

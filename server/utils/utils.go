@@ -43,7 +43,7 @@ func (dispatcher Dispatcher) ReadData() (message common.Message, err error) {
 	// 从 conn中 解析数据， 并且放到 message中， 这里注意要传 message 地址
 	err = json.Unmarshal(buf[:dataLen], &message)
 	if err != nil {
-		fmt.Printf("Unmarshal data from conn error: %v\n", err)
+		fmt.Printf("Server Unmarshal data from conn error: %v\n", err)
 		return
 	}
 
