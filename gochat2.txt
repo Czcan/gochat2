@@ -1,0 +1,59 @@
+卷 新加卷 的文件夹 PATH 列表
+卷序列号为 3622-1545
+D:.
+│  client.exe
+│  go.mod
+│  go.sum
+│  gochat2.txt
+│  main.exe
+│  README.md
+│  
+├─.vscode
+│      launch.json
+│      
+├─client
+│  │  main.go
+│  │  
+│  ├─logger
+│  │      logger.go
+│  │      
+│  ├─model
+│  │      user.go
+│  │      
+│  ├─process
+│  │      messageProcess.go
+│  │      serverProcess.go
+│  │      userProcess.go
+│  │      
+│  └─utils
+│          utils.go
+│          
+├─common
+│  └─message
+│          message.go
+│          
+├─config
+│      config.go
+│      config.json
+│      
+└─server
+    ├─main
+    │      main.go
+    │      redis.go
+    │      
+    ├─model
+    │      clientConn.go
+    │      error.go
+    │      user.go
+    │      userDao.go
+    │      
+    ├─process
+    │      groupMessageProcess.go
+    │      onlineInfoProcess.go
+    │      pointToPointMessageProcess.go
+    │      processor.go
+    │      userProcess.go
+    │      
+    └─utils
+            utils.go
+            
